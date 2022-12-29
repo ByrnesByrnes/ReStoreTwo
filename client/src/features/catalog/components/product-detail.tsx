@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../../../app/models/products";
 import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
-
+import { apiService } from "../../../api-services";
+import { Loader, NotFound } from "../../../ui";
 
 export default function ProductDetail() {
 	const [product, setProduct] = useState<Product | null>(null);
@@ -12,15 +13,15 @@ export default function ProductDetail() {
 	const { id } = useParams<{ id: string; }>();
 
 	useEffect(() => {
-		axios.get(`https://localhost:5001/api/Products/${id}`)
-			.then(({ data }) => setProduct(data))
-			.catch((error) => console.error(error))
+		apiService.Catalog.details(parseInt(id))
+			.then((data) => setProduct(data))
+			.catch((error) => console.log(error))
 			.finally(() => setLoading(false));
 	}, [id]);
 
-	if (loading) return <h3>Loading</h3>;
+	if (loading) return <Loader message="Loading Product..." />;
 
-	if (!product) return <h3>Product Not Found</h3>;
+	if (!product) return <NotFound />;
 
 	return (
 		<Grid container spacing={6}>

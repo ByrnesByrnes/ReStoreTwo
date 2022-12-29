@@ -1,30 +1,21 @@
-import { Button } from "@mui/material";
 import { useEffect, useState } from 'react';
+import { apiService } from "../../api-services";
 import { Product } from "../../app/models/products";
+import { Loader } from "../../ui";
 import { ProductList } from "./components";
 
 export default function Catalog() {
     const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-
-        fetch("https://localhost:5001/api/products").then((response) =>
-            response.json()
-        ).then((data) => {
-            setProducts(data);
-        }).catch((error) => {
-
-            console.log(error);
-        });
-
+        apiService.Catalog.list()
+            .then((data) => setProducts(data)
+            ).catch((error) => console.log(error))
+            .finally(() => setLoading(false));
     }, []);
 
-    // const handleAddProduct = () => {   };
+    if (loading) return <Loader message={"Loading Products..."} />;
 
-    return (
-        <>
-            <ProductList products={products} />
-            {/* <Button variant="contained" onClick={handleAddProduct}>Add Product</Button> */}
-        </>
-    );
+    return <ProductList products={products} />;
 }

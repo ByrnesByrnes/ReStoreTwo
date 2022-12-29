@@ -12,6 +12,6 @@ export const navigationLinksMiddle: LinkType[] = [
 ];
 
 export const navigationLinksRight: LinkType[] = [
-    { title: "Login", path: ROUTES.CATALOG },
-    { title: "Register", path: ROUTES.ABOUT },
+    { title: "Login", path: ROUTES.LOGIN },
+    { title: "Register", path: ROUTES.REGISTER },
 ];

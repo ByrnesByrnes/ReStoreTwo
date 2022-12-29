@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Header } from "../ui";
+import { Header, NotFound, ServerError } from "../ui";
 import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { Route, Switch } from "react-router-dom";
 import * as ROUTES from "../routes/constants";
 import { ProductDetail, Catalog, About, Contact, Home } from "../features";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
+        <ToastContainer position="bottom-right" hideProgressBar theme="colored" />
         <CssBaseline />
         <Header onThemeChange={handleThemeChange} />
         <Container>
@@ -30,6 +33,8 @@ function App() {
             <Route path={`${ROUTES.CATALOG}/:id`} component={ProductDetail} />
             <Route path={ROUTES.ABOUT} component={About} />
             <Route path={ROUTES.CONTACT} component={Contact} />
+            <Route path={ROUTES.SERVER_ERROR} component={ServerError} />
+            <Route component={NotFound} />
           </Switch>
         </Container>
       </ThemeProvider>
