@@ -1,14 +1,18 @@
 import { ShoppingCart } from "@mui/icons-material";
 import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, SxProps, Theme, Toolbar, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { navigationLinksMiddle, navigationLinksRight } from "./components";
 import * as ROUTES from "../../../routes/constants";
+import { useStoreContext } from "../../../app/context/store-context";
 
 interface Props {
     onThemeChange: () => void;
 }
 
 const Header: React.FC<Props> = ({ onThemeChange }) => {
+    const { basket } = useStoreContext();
+
+    const quantityTotal = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
     const navigationStyles = {
         color: "inherit",
@@ -52,8 +56,8 @@ const Header: React.FC<Props> = ({ onThemeChange }) => {
                     ))}
                 </List>
                 <Box display="flex" alignItems="center">
-                    <IconButton size="large" sx={{ color: "inherit" }}>
-                        <Badge badgeContent={4} color="secondary">
+                    <IconButton component={Link} to={ROUTES.BASKET} size="large" sx={{ color: "inherit" }}>
+                        <Badge badgeContent={quantityTotal} color="secondary">
                             <ShoppingCart />
                         </Badge>
                     </IconButton>

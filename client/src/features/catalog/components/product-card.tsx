@@ -1,14 +1,29 @@
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { Product } from "../../../app/models/products";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../../../routes/constants";
+import { apiService } from "../../../api-services";
+import { LoadingButton } from "@mui/lab";
+import { useStoreContext } from "../../../app/context/store-context";
 
 interface Props {
     product: Product;
 }
 
 const ProductCard: React.FC<Props> = ({ product }) => {
+    const [loading, setLoading] = useState<boolean>(false);
+    const { setBasket } = useStoreContext();
+
+    const handleAddItem = (productId: number) => {
+        setLoading(true);
+
+        apiService.Basket.addItem(productId)
+            .then((data) => setBasket(data.value))
+            .catch((error) => console.log(error))
+            .finally(() => setLoading(false));
+    };
+
     return (
         <Card>
             <CardHeader
@@ -40,7 +55,14 @@ const ProductCard: React.FC<Props> = ({ product }) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small">Add To Cart</Button>
+                <LoadingButton
+                    onClick={() => handleAddItem(product.id)}
+                    loading={loading}
+                    size="small"
+                    variant="contained"
+                >
+                    Add To Cart
+                </LoadingButton>
                 <Button component={Link} to={`${ROUTES.CATALOG}/${product.id}`} size="small">View</Button>
             </CardActions>
         </Card>
