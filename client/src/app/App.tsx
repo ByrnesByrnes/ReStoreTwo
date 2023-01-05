@@ -6,27 +6,28 @@ import * as ROUTES from "../routes/constants";
 import { ProductDetail, Catalog, About, Contact, Home, Basket, Checkout } from "../features";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useStoreContext } from "./context/store-context";
 import { getCookie } from "./utilities";
 import { apiService } from "../api-services";
+import { useAppDispatch } from "./store/configure-store";
+import { setBasket } from "../features/basket/data/basket-slice";
 
 
 function App() {
-	const { setBasket, basket } = useStoreContext();
+	const dispatch = useAppDispatch();
 	const [loading, setLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 
 		if (getCookie("buyerId")) {
 			apiService.Basket.get()
-				.then((data) => setBasket(data))
+				.then((data) => dispatch(setBasket(data)))
 				.catch((error) => console.log(error))
 				.finally(() => setLoading(false));
 		} else {
 			setLoading(false);
 		}
 
-	}, [setBasket]);
+	}, [dispatch]);
 
 	const [darkTheme, setDarkTheme] = useState<boolean>(false);
 
@@ -42,26 +43,24 @@ function App() {
 	if (loading) return <Loader message="Initializing App..." />;
 
 	return (
-		<>
-			<ThemeProvider theme={theme}>
-				<ToastContainer position="bottom-right" hideProgressBar theme="colored" />
-				<CssBaseline />
-				<Header onThemeChange={handleThemeChange} />
-				<Container>
-					<Switch>
-						<Route exact path={ROUTES.HOME} component={Home} />
-						<Route exact path={ROUTES.CATALOG} component={Catalog} />
-						<Route path={`${ROUTES.CATALOG}/:id`} component={ProductDetail} />
-						<Route path={ROUTES.ABOUT} component={About} />
-						<Route path={ROUTES.CONTACT} component={Contact} />
-						<Route path={ROUTES.BASKET} component={Basket} />
-						<Route path={ROUTES.CHECKOUT} component={Checkout} />
-						<Route path={ROUTES.SERVER_ERROR} component={ServerError} />
-						<Route component={NotFound} />
-					</Switch>
-				</Container>
-			</ThemeProvider>
-		</>
+		<ThemeProvider theme={theme}>
+			<ToastContainer position="bottom-right" hideProgressBar theme="colored" />
+			<CssBaseline />
+			<Header onThemeChange={handleThemeChange} />
+			<Container>
+				<Switch>
+					<Route exact path={ROUTES.HOME} component={Home} />
+					<Route exact path={ROUTES.CATALOG} component={Catalog} />
+					<Route path={`${ROUTES.CATALOG}/:id`} component={ProductDetail} />
+					<Route path={ROUTES.ABOUT} component={About} />
+					<Route path={ROUTES.CONTACT} component={Contact} />
+					<Route path={ROUTES.BASKET} component={Basket} />
+					<Route path={ROUTES.CHECKOUT} component={Checkout} />
+					<Route path={ROUTES.SERVER_ERROR} component={ServerError} />
+					<Route component={NotFound} />
+				</Switch>
+			</Container>
+		</ThemeProvider>
 	);
 }
 

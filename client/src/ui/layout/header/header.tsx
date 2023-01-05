@@ -3,14 +3,14 @@ import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, SxProps, Theme,
 import { Link, NavLink } from "react-router-dom";
 import { navigationLinksMiddle, navigationLinksRight } from "./components";
 import * as ROUTES from "../../../routes/constants";
-import { useStoreContext } from "../../../app/context/store-context";
+import { useAppSelector } from "../../../app/store/configure-store";
 
 interface Props {
     onThemeChange: () => void;
 }
 
 const Header: React.FC<Props> = ({ onThemeChange }) => {
-    const { basket } = useStoreContext();
+    const { basket } = useAppSelector(state => state.basket);
 
     const quantityTotal = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 

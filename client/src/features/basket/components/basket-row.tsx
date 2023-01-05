@@ -1,47 +1,19 @@
 import { Remove, Add, Delete } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { TableRow, TableCell, Box } from "@mui/material";
-import React, { useState } from 'react';
-import { apiService } from "../../../api-services";
-import { useStoreContext } from "../../../app/context/store-context";
+import React from 'react';
+import { useAppDispatch, useAppSelector } from "../../../app/store/configure-store";
+import { removeBasketItemAsync, addBasketItemAsync } from "../data/basket-slice";
 import { BasketItem } from "../interfaces";
-
-enum IncrementLoad {
-    Add = "add",
-    Decrease = "decrease",
-    Remove = "remove",
-    None = ""
-};
 
 interface Props {
     item: BasketItem;
 }
 
 const BasketRow: React.FC<Props> = ({ item }) => {
-    const [loading, setLoading] = useState<IncrementLoad>(IncrementLoad.None);
-    const { setBasket, removeItem } = useStoreContext();
+    const { status } = useAppSelector(state => state.basket);
 
-    const handleAddOne = (productId: number) => {
-        setLoading(IncrementLoad.Add);
-        apiService.Basket.addItem(productId)
-            .then((data) => setBasket(data.value))
-            .catch((error) => console.log(error))
-            .finally(() => setLoading(IncrementLoad.None));
-    };
-
-    const handleRemoveOne = (productId: number, quantity = 1, loadType = IncrementLoad.Decrease) => {
-
-        if (loadType === IncrementLoad.Remove) {
-            setLoading(IncrementLoad.Remove);
-        } else {
-            setLoading(IncrementLoad.Decrease);
-        }
-
-        apiService.Basket.removeItem(productId)
-            .then(() => removeItem(productId, 1))
-            .catch((error) => console.log(error))
-            .finally(() => setLoading(IncrementLoad.None));
-    };
+    const dispatch = useAppDispatch();
 
     return (
         <TableRow
@@ -57,18 +29,17 @@ const BasketRow: React.FC<Props> = ({ item }) => {
             <TableCell align="right">${(item.price / 100).toFixed(2)}</TableCell>
             <TableCell align="center">
                 <LoadingButton
-                    disabled={loading === IncrementLoad.Remove}
-                    loading={loading === IncrementLoad.Decrease}
+                    loading={status === `pendingRemoveItem-${item.productId}-minus`}
                     color="error"
-                    onClick={() => handleRemoveOne(item.productId)}
+                    onClick={() => dispatch(removeBasketItemAsync({ productId: item?.productId, quantity: 1, name: "minus" }))}
                 >
                     <Remove />
                 </LoadingButton>
                 {item.quantity}
                 <LoadingButton
-                    loading={loading === IncrementLoad.Add}
+                    loading={status === `pendingAddItem-${item.productId}`}
                     color="secondary"
-                    onClick={() => handleAddOne(item.productId)}
+                    onClick={() => dispatch(addBasketItemAsync({ productId: item.productId }))}
                 >
                     <Add />
                 </LoadingButton>
@@ -76,9 +47,8 @@ const BasketRow: React.FC<Props> = ({ item }) => {
             <TableCell align="right">{((item.price / 100) * item.quantity).toFixed(2)}</TableCell>
             <TableCell align="right">
                 <LoadingButton
-                    disabled={loading === IncrementLoad.Decrease}
-                    loading={loading === IncrementLoad.Remove}
-                    onClick={() => handleRemoveOne(item.productId, item.quantity, IncrementLoad.Remove)}
+                    loading={status === `pendingRemoveItem-${item.productId}-delete`}
+                    onClick={() => dispatch(removeBasketItemAsync({ productId: item.productId, quantity: item.quantity, name: "delete" }))}
                     color="error"
                 >
                     <Delete />
