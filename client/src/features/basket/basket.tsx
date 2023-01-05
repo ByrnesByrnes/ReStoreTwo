@@ -1,11 +1,11 @@
 import { Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useStoreContext } from "../../app/context/store-context";
 import { BasketRow, BasketSummary } from "./components";
 import * as ROUTES from "../../routes/constants";
+import { useAppSelector } from "../../app/store/configure-store";
 
 export default function Basket() {
-    const { basket } = useStoreContext();
+    const { basket } = useAppSelector(state => state.basket);
 
     if (!basket) return <Typography variant="h3">Your basket is Empty</Typography>;
 
