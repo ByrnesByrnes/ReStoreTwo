@@ -1,6 +1,6 @@
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from "@mui/material";
 import React from "react";
-import { Product } from "../../../app/models/products";
+import { Product } from "../../../app/models";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../../../routes/constants";
 import { LoadingButton } from "@mui/lab";
