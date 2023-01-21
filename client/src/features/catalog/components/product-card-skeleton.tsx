@@ -32,7 +32,7 @@ const ProductCardSkeleton = () => {
             </CardContent>
             <CardActions>
                 <>
-                    <Skeleton animation="wave" height={10} width='40%' />
+                    <Skeleton animation="wave" height={10} width="40%" />
                     <Skeleton animation="wave" height={10} width="20%" />
                 </>
             </CardActions>

@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "..";
 import { PaginationResponse } from "../app/models";
+import { store } from "../app/store/configure-store";
 import * as ROUTES from "../routes/constants";
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
@@ -11,13 +12,25 @@ axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
+axios.interceptors.request.use(config => {
+    const token = store.getState().account.user?.token;
+
+    config.headers = config.headers ?? {};
+
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;        
+    };
+
+    return config;
+})
+
 axios.interceptors.response.use(
     async (response) => {
         await sleep();
 
         const pagination = response.headers["pagination"];
 
-        if(pagination) {
+        if (pagination) {
             response.data = new PaginationResponse(response.data, JSON.parse(pagination));           
 
             return response;
@@ -95,10 +108,17 @@ const TestErrors = {
     getValidationError: () => requests.get("buggy/validation-error"),
 };
 
+const Account = {
+    login: (values: any) => requests.post("account/login", values),
+    register: (values: any)=> requests.post("account/register", values),
+    currentUser: () => requests.get("account/currentUser")
+}
+
 const apiService = {
     Catalog,
     TestErrors,
     Basket,
+    Account,
 };
 
 export default apiService;

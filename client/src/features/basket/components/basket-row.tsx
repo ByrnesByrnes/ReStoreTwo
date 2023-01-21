@@ -1,7 +1,7 @@
 import { Remove, Add, Delete } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { TableRow, TableCell, Box } from "@mui/material";
-import React from 'react';
+import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/store/configure-store";
 import { removeBasketItemAsync, addBasketItemAsync } from "../data/basket-slice";
 import { BasketItem } from "../interfaces";
@@ -18,7 +18,7 @@ const BasketRow: React.FC<Props> = ({ item }) => {
     return (
         <TableRow
             key={item.productId}
-            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
         >
             <TableCell component="th" scope="row">
                 <Box display="flex" alignItems="center">

@@ -4,3 +4,4 @@ export { Contact } from "./contact";
 export { Home } from "./home";
 export { Basket } from "./basket";
 export { Checkout } from "./checkout";
+export { Login, Register } from "./account";

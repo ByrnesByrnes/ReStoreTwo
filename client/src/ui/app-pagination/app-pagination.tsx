@@ -1,5 +1,5 @@
 import { Box, Typography, Pagination } from "@mui/material";
-import React from 'react';
+import React from "react";
 import { MetaData } from "../../app/models";
 
 interface Props {

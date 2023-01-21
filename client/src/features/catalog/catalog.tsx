@@ -1,5 +1,5 @@
 import { Grid, Paper } from "@mui/material";
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store/configure-store";
 import { AppPagination, CheckboxButtons, Loader, RadioButtonGroup } from "../../ui";
 import { ProductList, ProductSearch } from "./components";

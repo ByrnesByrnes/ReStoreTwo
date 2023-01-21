@@ -1,33 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Header, Loader, NotFound, ServerError } from "../ui";
 import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { Route, Switch } from "react-router-dom";
 import * as ROUTES from "../routes/constants";
-import { ProductDetail, Catalog, About, Contact, Home, Basket, Checkout } from "../features";
+import { ProductDetail, Catalog, About, Contact, Home, Basket, Checkout, Login, Register } from "../features";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getCookie } from "./utilities";
-import { apiService } from "../api-services";
 import { useAppDispatch } from "./store/configure-store";
-import { setBasket } from "../features/basket/data/basket-slice";
-
+import { fetchBasketAsync } from "../features/basket/data/basket-slice";
+import { fetchCurrentUser } from "../features/account/data/account-slice";
+import { PrivateRoute } from "../routes";
 
 function App() {
 	const dispatch = useAppDispatch();
 	const [loading, setLoading] = useState<boolean>(true);
 
-	useEffect(() => {
-
-		if (getCookie("buyerId")) {
-			apiService.Basket.get()
-				.then((data) => dispatch(setBasket(data)))
-				.catch((error) => console.log(error))
-				.finally(() => setLoading(false));
-		} else {
-			setLoading(false);
+	const initApp = useCallback(async () => {
+		try {
+			await dispatch(fetchCurrentUser());
+			await dispatch(fetchBasketAsync());
+		} catch (error) {
+			console.log(error);
 		}
 
 	}, [dispatch]);
+
+
+	useEffect(() => {
+		initApp().then(() => setLoading(false));
+	}, [initApp]);
 
 	const [darkTheme, setDarkTheme] = useState<boolean>(false);
 
@@ -55,8 +56,10 @@ function App() {
 					<Route path={ROUTES.ABOUT} component={About} />
 					<Route path={ROUTES.CONTACT} component={Contact} />
 					<Route path={ROUTES.BASKET} component={Basket} />
-					<Route path={ROUTES.CHECKOUT} component={Checkout} />
+					<PrivateRoute path={ROUTES.CHECKOUT} component={Checkout} />
 					<Route path={ROUTES.SERVER_ERROR} component={ServerError} />
+					<Route path={ROUTES.LOGIN} component={Login} />
+					<Route path={ROUTES.REGISTER} component={Register} />
 					<Route component={NotFound} />
 				</Switch>
 			</Container>
