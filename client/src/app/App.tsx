@@ -3,7 +3,7 @@ import { Header, Loader, NotFound, ServerError } from "../ui";
 import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { Route, Switch } from "react-router-dom";
 import * as ROUTES from "../routes/constants";
-import { ProductDetail, Catalog, About, Contact, Home, Basket, Checkout, Login, Register } from "../features";
+import { ProductDetail, Catalog, About, Contact, Home, Basket, Checkout, Login, Register, Orders, Order } from "../features";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "./store/configure-store";
@@ -57,6 +57,8 @@ function App() {
 					<Route path={ROUTES.CONTACT} component={Contact} />
 					<Route path={ROUTES.BASKET} component={Basket} />
 					<PrivateRoute path={ROUTES.CHECKOUT} component={Checkout} />
+					<PrivateRoute exact path={ROUTES.ORDERS} component={Orders} />
+					<PrivateRoute path={`${ROUTES.ORDERS}${ROUTES.ORDER}/:id`} component={Order} />
 					<Route path={ROUTES.SERVER_ERROR} component={ServerError} />
 					<Route path={ROUTES.LOGIN} component={Login} />
 					<Route path={ROUTES.REGISTER} component={Register} />

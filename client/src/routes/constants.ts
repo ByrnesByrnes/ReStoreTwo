@@ -7,3 +7,5 @@ export const LOGIN = "/login";
 export const REGISTER = "/register";
 export const BASKET = "/basket";
 export const CHECKOUT = "/checkout";
+export const ORDERS = "/orders";
+export const ORDER = "/order";

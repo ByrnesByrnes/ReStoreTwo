@@ -5,6 +5,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { useAppDispatch, useAppSelector } from "../../../../app/store/configure-store";
 import { signedOut } from "../../../../features/account/data/account-slice";
 import { clearBasket } from "../../../../features/basket/data/basket-slice";
+import { Link } from "react-router-dom";
+import * as ROUTES from "../../../../routes/constants";
 
 const SignedInMenu = () => {
     const { user } = useAppSelector(state => state.account);
@@ -49,7 +51,7 @@ const SignedInMenu = () => {
                 }}
             >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My Orders</MenuItem>
+                <MenuItem component={Link} to={ROUTES.ORDERS}>My Orders</MenuItem>
                 <MenuItem onClick={handleSignOut}>Logout</MenuItem>
             </Menu>
         </>
