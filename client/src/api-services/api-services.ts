@@ -121,12 +121,17 @@ const Orders = {
     create: (values: any) => requests.post("orders", values),
 };
 
+const Payment = {
+    createPaymentIntent: () => requests.post("payments", {}),
+}
+
 const apiService = {
     Catalog,
     TestErrors,
     Basket,
     Account,
     Orders,
+    Payment
 };
 
 export default apiService;

@@ -38,7 +38,7 @@ namespace API
                     Description = "Jwt auth header",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
+                    Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -91,6 +91,7 @@ namespace API
 
             services.AddAuthorization();
             services.AddScoped<TokenService>();
+            services.AddScoped<PaymentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
