@@ -29,7 +29,7 @@ const Header: React.FC<Props> = ({ onThemeChange }) => {
     } as SxProps<Theme>;
 
     return (
-        <AppBar position="sticky" sx={{ mb: 4 }}>
+        <AppBar position="sticky">
             <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 
                 <Box display="flex" alignItems="center">

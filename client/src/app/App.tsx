@@ -49,23 +49,27 @@ function App() {
 			<ToastContainer position="bottom-right" hideProgressBar theme="colored" />
 			<CssBaseline />
 			<Header onThemeChange={handleThemeChange} />
-			<Container>
-				<Switch>
-					<Route exact path={ROUTES.HOME} component={Home} />
-					<Route exact path={ROUTES.CATALOG} component={Catalog} />
-					<Route path={`${ROUTES.CATALOG}/:id`} component={ProductDetail} />
-					<Route path={ROUTES.ABOUT} component={About} />
-					<Route path={ROUTES.CONTACT} component={Contact} />
-					<Route path={ROUTES.BASKET} component={Basket} />
-					<PrivateRoute path={ROUTES.CHECKOUT} component={CheckoutWrapper} />
-					<PrivateRoute exact path={ROUTES.ORDERS} component={Orders} />
-					<PrivateRoute path={`${ROUTES.ORDERS}${ROUTES.ORDER}/:id`} component={Order} />
-					<Route path={ROUTES.SERVER_ERROR} component={ServerError} />
-					<Route path={ROUTES.LOGIN} component={Login} />
-					<Route path={ROUTES.REGISTER} component={Register} />
-					<Route component={NotFound} />
-				</Switch>
-			</Container>
+
+			<Route exact path={ROUTES.HOME} component={Home} />
+
+			<Route path={"/(.+)"} render={() => (
+				<Container sx={{ mt: 4 }}>
+					<Switch>
+						<Route exact path={ROUTES.CATALOG} component={Catalog} />
+						<Route path={`${ROUTES.CATALOG}/:id`} component={ProductDetail} />
+						<Route path={ROUTES.ABOUT} component={About} />
+						<Route path={ROUTES.CONTACT} component={Contact} />
+						<Route path={ROUTES.BASKET} component={Basket} />
+						<PrivateRoute path={ROUTES.CHECKOUT} component={CheckoutWrapper} />
+						<PrivateRoute exact path={ROUTES.ORDERS} component={Orders} />
+						<PrivateRoute path={`${ROUTES.ORDERS}${ROUTES.ORDER}/:id`} component={Order} />
+						<Route path={ROUTES.SERVER_ERROR} component={ServerError} />
+						<Route path={ROUTES.LOGIN} component={Login} />
+						<Route path={ROUTES.REGISTER} component={Register} />
+						<Route component={NotFound} />
+					</Switch>
+				</Container>
+			)} />
 		</ThemeProvider>
 	);
 }

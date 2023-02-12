@@ -7,7 +7,7 @@ import * as ROUTES from "../routes/constants";
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
-axios.defaults.baseURL = "http://localhost:5000/api/";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
@@ -26,12 +26,15 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use(
     async (response) => {
-        await sleep();
+        if (process.env.NODE_ENV === "development") await sleep();
 
         const pagination = response.headers["pagination"];
 
         if (pagination) {
-            response.data = new PaginationResponse(response.data, JSON.parse(pagination));           
+            response.data = new PaginationResponse(
+                response.data,
+                JSON.parse(pagination),
+            );
 
             return response;
         }
@@ -123,7 +126,7 @@ const Orders = {
 
 const Payment = {
     createPaymentIntent: () => requests.post("payments", {}),
-}
+};
 
 const apiService = {
     Catalog,
@@ -131,7 +134,7 @@ const apiService = {
     Basket,
     Account,
     Orders,
-    Payment
+    Payment,
 };
 
 export default apiService;
