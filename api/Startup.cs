@@ -62,7 +62,7 @@ namespace API
 
             });
 
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIORNMENT");
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             string connString;
             if (env == "Development")
                 connString = Configuration.GetConnectionString("DefaultConnection");
